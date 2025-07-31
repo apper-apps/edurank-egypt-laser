@@ -1,12 +1,12 @@
 import React from "react";
 import ApperIcon from "@/components/ApperIcon";
 
-const StarRating = ({ rating, maxRating = 5, size = 16, className = "" }) => {
+const StarRating = ({ rating = 0, maxRating = 5, size = 16, className = "" }) => {
   const stars = [];
   
   for (let i = 1; i <= maxRating; i++) {
-    const isFilled = i <= Math.floor(rating);
-    const isHalfFilled = i === Math.floor(rating) + 1 && rating % 1 >= 0.5;
+    const isFilled = i <= Math.floor(rating || 0);
+    const isHalfFilled = i === Math.floor(rating || 0) + 1 && (rating || 0) % 1 >= 0.5;
     
     stars.push(
       <div key={i} className="relative">
@@ -33,8 +33,8 @@ const StarRating = ({ rating, maxRating = 5, size = 16, className = "" }) => {
   return (
     <div className={`star-rating ${className}`}>
       {stars}
-      <span className="ml-2 text-sm text-gray-600 font-medium">
-        {rating.toFixed(1)}
+<span className="ml-2 text-sm text-gray-600 font-medium">
+        {(rating || 0).toFixed(1)}
       </span>
     </div>
   );
