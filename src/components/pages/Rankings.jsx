@@ -6,7 +6,7 @@ import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
 import ApperIcon from "@/components/ApperIcon";
-
+import Button from "@/components/atoms/Button";
 const Rankings = () => {
   const [rankings, setRankings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +41,7 @@ const Rankings = () => {
     }
   };
 
-  const sortedRankings = [...rankings].sort((a, b) => {
+const sortedRankings = [...rankings].sort((a, b) => {
     let aValue, bValue;
     
     switch (sortBy) {
@@ -60,6 +60,10 @@ const Rankings = () => {
       case "facilitiesScore":
         aValue = a.facilitiesScore;
         bValue = b.facilitiesScore;
+        break;
+      case "studentSatisfaction":
+        aValue = a.university.rating;
+        bValue = b.university.rating;
         break;
       case "overallScore":
         aValue = a.university.overallScore;
@@ -88,7 +92,7 @@ const Rankings = () => {
       : <ApperIcon name="ArrowDown" size={14} className="text-primary" />;
   };
 
-  const getRankMedal = (rank) => {
+const getRankMedal = (rank) => {
     switch (rank) {
       case 1:
         return <ApperIcon name="Medal" size={20} className="text-yellow-500" />;
@@ -100,6 +104,33 @@ const Rankings = () => {
         return <span className="text-lg font-bold text-primary">#{rank}</span>;
     }
   };
+
+  const getPositionChange = (ranking) => {
+    if (!ranking.previousRank) return null;
+    
+    const change = ranking.previousRank - ranking.rank;
+    if (change === 0) return null;
+    
+    return (
+      <div className="flex items-center gap-1 ml-2">
+        {change > 0 ? (
+          <ApperIcon name="TrendingUp" size={16} className="text-green-500" />
+        ) : (
+          <ApperIcon name="TrendingDown" size={16} className="text-red-500" />
+        )}
+        <span className={`text-xs font-medium ${change > 0 ? 'text-green-500' : 'text-red-500'}`}>
+          {Math.abs(change)}
+        </span>
+      </div>
+    );
+  };
+
+  const rankingCriteria = [
+    { value: "rank", label: "Overall Ranking" },
+    { value: "academicScore", label: "Academic Quality" },
+    { value: "facilitiesScore", label: "Facilities" },
+    { value: "studentSatisfaction", label: "Student Satisfaction" }
+  ];
 
   if (loading) {
     return <Loading type="table" />;
@@ -154,21 +185,39 @@ const Rankings = () => {
 
       {/* Rankings Table */}
       <div className="bg-surface rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="font-display text-xl font-semibold text-gray-900">
-            Official Rankings
-          </h2>
-          <p className="text-gray-600 mt-1">
-            Click on column headers to sort the rankings
-          </p>
+<div className="p-6 border-b border-gray-200">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="font-display text-xl font-semibold text-gray-900">
+                Official Rankings
+              </h2>
+              <p className="text-gray-600 mt-1">
+                Click on column headers to sort the rankings
+              </p>
+            </div>
+            <div className="flex flex-col items-end gap-2">
+              <label className="text-sm font-medium text-gray-700">Sort by:</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              >
+                {rankingCriteria.map(criteria => (
+                  <option key={criteria.value} value={criteria.value}>
+                    {criteria.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
         
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th 
-                  className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
+<th 
+                  className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-50 transition-colors"
                   onClick={() => handleSort("rank")}
                 >
                   <div className="flex items-center gap-2">
@@ -185,8 +234,8 @@ const Rankings = () => {
                     {getSortIcon("name")}
                   </div>
                 </th>
-                <th 
-                  className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
+<th 
+                  className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-50 transition-colors"
                   onClick={() => handleSort("overallScore")}
                 >
                   <div className="flex items-center gap-2">
@@ -227,48 +276,63 @@ const Rankings = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {sortedRankings.map((ranking, index) => (
+{sortedRankings.map((ranking, index) => (
                 <tr 
                   key={ranking.Id} 
-                  className={`ranking-row ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
+                  className={`ranking-row hover:bg-blue-50 transition-colors duration-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'}`}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
+                  <td className="px-6 py-5 whitespace-nowrap">
+                    <div className="flex items-center">
                       {getRankMedal(ranking.rank)}
+                      {getPositionChange(ranking)}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div>
-                      <div className="font-medium text-gray-900">
-                        {ranking.university.name}
+                  <td className="px-6 py-5">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                        <img 
+                          src={ranking.university.logoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(ranking.university.name)}&background=1a5f7a&color=fff&size=48`}
+                          alt={`${ranking.university.name} logo`}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {ranking.university.location}, {ranking.university.governorate}
+                      <div>
+                        <div className="font-semibold text-gray-900 text-base">
+                          {ranking.university.name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {ranking.university.location}, {ranking.university.governorate}
+                        </div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-5 whitespace-nowrap">
                     <div className="text-lg font-bold text-primary">
                       {ranking.university.overallScore.toFixed(1)}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                  <td className="px-6 py-5 whitespace-nowrap">
+                    <div className="text-sm font-semibold text-gray-900">
                       {ranking.academicScore.toFixed(1)}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                  <td className="px-6 py-5 whitespace-nowrap">
+                    <div className="text-sm font-semibold text-gray-900">
                       {ranking.researchScore.toFixed(1)}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                  <td className="px-6 py-5 whitespace-nowrap">
+                    <div className="text-sm font-semibold text-gray-900">
                       {ranking.facilitiesScore.toFixed(1)}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <StarRating rating={ranking.university.rating} size={16} />
+                  <td className="px-6 py-5 whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      <StarRating rating={ranking.university.rating} size={16} />
+                      <span className="text-sm font-medium text-gray-600">
+                        {ranking.university.rating}
+                      </span>
+                    </div>
                   </td>
                 </tr>
               ))}

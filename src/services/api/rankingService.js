@@ -10,16 +10,19 @@ class RankingService {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  async getRankings() {
+async getRankings() {
     await this.delay();
     const universities = await universityService.getAll();
     
     const rankingsWithUniversities = this.rankings
       .map(ranking => {
         const university = universities.find(u => u.Id === ranking.universityId);
+        // Simulate previous rank for position change indicators
+        const previousRank = ranking.rank + Math.floor(Math.random() * 3) - 1;
         return {
           ...ranking,
-          university: university || null
+          university: university || null,
+          previousRank: previousRank > 0 ? previousRank : null
         };
       })
       .filter(ranking => ranking.university)

@@ -13,7 +13,8 @@ async getAll() {
     await this.delay();
     return this.universities.map(university => ({
       ...university,
-      programs: this.getUniversityPrograms(university.Id)
+      programs: this.getUniversityPrograms(university.Id),
+      logoUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(university.name)}&background=1a5f7a&color=fff&size=96`
     }));
   }
 
