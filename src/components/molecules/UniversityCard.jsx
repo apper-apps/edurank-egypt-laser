@@ -1,8 +1,8 @@
 import React from "react";
-import { Card, CardContent } from "@/components/atoms/Card";
-import StarRating from "@/components/molecules/StarRating";
 import ApperIcon from "@/components/ApperIcon";
-
+import StarRating from "@/components/molecules/StarRating";
+import MultiCriteriaRating from "@/components/molecules/MultiCriteriaRating";
+import { Card, CardContent } from "@/components/atoms/Card";
 const UniversityCard = ({ university, onClick }) => {
   return (
     <Card className="university-card cursor-pointer" onClick={() => onClick(university.Id)}>
@@ -35,16 +35,15 @@ const UniversityCard = ({ university, onClick }) => {
             </span>
           </div>
           
-          <div className="flex items-center justify-between">
-            <StarRating rating={university.rating} size={18} />
-            <div className="text-right">
+<div className="space-y-4">
+            <MultiCriteriaRating ratings={university.ratings} compact={true} />
+            <div className="flex items-center justify-between pt-2 border-t border-gray-100">
               <div className="text-sm text-gray-500">Overall Score</div>
               <div className="font-bold text-lg text-primary">
                 {university.overallScore}
               </div>
             </div>
           </div>
-          
           <div className="mt-4 pt-4 border-t border-gray-100">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-500">Students</span>

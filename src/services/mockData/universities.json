@@ -6,6 +6,13 @@
     "governorate": "Giza",
     "location": "Giza",
     "rating": 4.5,
+    "ratings": {
+      "academicQuality": 4.6,
+      "campusFacilities": 4.2,
+      "studentLife": 4.4,
+      "careerServices": 4.3,
+      "facultyQuality": 4.8
+    },
     "overallScore": 85.2,
     "establishedYear": 1908,
     "studentCount": 155000,
@@ -18,6 +25,13 @@
     "governorate": "Alexandria",
     "location": "Alexandria",
     "rating": 4.3,
+    "ratings": {
+      "academicQuality": 4.4,
+      "campusFacilities": 4.0,
+      "studentLife": 4.2,
+      "careerServices": 4.1,
+      "facultyQuality": 4.6
+    },
     "overallScore": 82.7,
     "establishedYear": 1942,
     "studentCount": 180000,
@@ -30,6 +44,13 @@
     "governorate": "Cairo",
     "location": "New Cairo",
     "rating": 4.7,
+    "ratings": {
+      "academicQuality": 4.9,
+      "campusFacilities": 4.8,
+      "studentLife": 4.6,
+      "careerServices": 4.9,
+      "facultyQuality": 4.7
+    },
     "overallScore": 88.9,
     "establishedYear": 1919,
     "studentCount": 6500,
@@ -42,6 +63,13 @@
     "governorate": "Cairo",
     "location": "Abbasia",
     "rating": 4.2,
+    "ratings": {
+      "academicQuality": 4.3,
+      "campusFacilities": 3.9,
+      "studentLife": 4.1,
+      "careerServices": 4.0,
+      "facultyQuality": 4.5
+    },
     "overallScore": 80.1,
     "establishedYear": 1950,
     "studentCount": 180000,
@@ -54,6 +82,13 @@
     "governorate": "Assiut",
     "location": "Assiut",
     "rating": 4.0,
+    "ratings": {
+      "academicQuality": 4.1,
+      "campusFacilities": 3.7,
+      "studentLife": 3.9,
+      "careerServices": 3.8,
+      "facultyQuality": 4.3
+    },
     "overallScore": 76.5,
     "establishedYear": 1957,
     "studentCount": 85000,
@@ -66,6 +101,13 @@
     "governorate": "Dakahlia",
     "location": "Mansoura",
     "rating": 4.1,
+    "ratings": {
+      "academicQuality": 4.2,
+      "campusFacilities": 3.8,
+      "studentLife": 4.0,
+      "careerServices": 3.9,
+      "facultyQuality": 4.4
+    },
     "overallScore": 78.3,
     "establishedYear": 1972,
     "studentCount": 120000,
@@ -78,6 +120,13 @@
     "governorate": "Sharqia",
     "location": "Zagazig",
     "rating": 3.9,
+    "ratings": {
+      "academicQuality": 4.0,
+      "campusFacilities": 3.6,
+      "studentLife": 3.8,
+      "careerServices": 3.7,
+      "facultyQuality": 4.2
+    },
     "overallScore": 74.8,
     "establishedYear": 1974,
     "studentCount": 140000,
@@ -90,6 +139,13 @@
     "governorate": "Cairo",
     "location": "Helwan",
     "rating": 3.8,
+    "ratings": {
+      "academicQuality": 3.9,
+      "campusFacilities": 3.5,
+      "studentLife": 3.7,
+      "careerServices": 3.6,
+      "facultyQuality": 4.1
+    },
     "overallScore": 73.2,
     "establishedYear": 1975,
     "studentCount": 130000,
@@ -102,6 +158,13 @@
     "governorate": "Gharbia",
     "location": "Tanta",
     "rating": 3.9,
+    "ratings": {
+      "academicQuality": 4.0,
+      "campusFacilities": 3.6,
+      "studentLife": 3.8,
+      "careerServices": 3.8,
+      "facultyQuality": 4.2
+    },
     "overallScore": 75.1,
     "establishedYear": 1972,
     "studentCount": 110000,
@@ -114,6 +177,13 @@
     "governorate": "Cairo",
     "location": "New Cairo",
     "rating": 4.6,
+    "ratings": {
+      "academicQuality": 4.8,
+      "campusFacilities": 4.7,
+      "studentLife": 4.4,
+      "careerServices": 4.8,
+      "facultyQuality": 4.6
+    },
     "overallScore": 87.4,
     "establishedYear": 2003,
     "studentCount": 8500,

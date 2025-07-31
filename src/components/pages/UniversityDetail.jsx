@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import universityService from "@/services/api/universityService";
+import ApperIcon from "@/components/ApperIcon";
 import StarRating from "@/components/molecules/StarRating";
-import Button from "@/components/atoms/Button";
-import { Card } from "@/components/atoms/Card";
+import DetailedRatings from "@/components/molecules/DetailedRatings";
+import MultiCriteriaRating from "@/components/molecules/MultiCriteriaRating";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
-import ApperIcon from "@/components/ApperIcon";
+import Universities from "@/components/pages/Universities";
+import Button from "@/components/atoms/Button";
+import { Card } from "@/components/atoms/Card";
 
 const UniversityDetail = () => {
   const { id } = useParams();
@@ -94,14 +97,14 @@ const UniversityDetail = () => {
             </p>
           </div>
           
-          <div className="bg-white/10 rounded-lg p-6 min-w-[280px]">
+<div className="bg-white/10 rounded-lg p-6 min-w-[320px]">
             <div className="text-center mb-6">
               <div className="text-3xl font-bold text-secondary mb-2">
                 {university.overallScore}
               </div>
               <div className="text-white/80 mb-3">Overall Score</div>
-              <StarRating rating={university.rating} size={20} />
             </div>
+            <DetailedRatings ratings={university.ratings} />
             
             <div className="space-y-3">
               <div className="flex justify-between items-center">
@@ -192,9 +195,17 @@ const UniversityDetail = () => {
                 </div>
               ))}
             </div>
+</Card>
+
+          {/* Detailed Ratings Breakdown */}
+          <Card className="p-6">
+            <h2 className="text-xl font-bold text-primary mb-6 flex items-center gap-2">
+              <ApperIcon name="BarChart3" size={24} />
+              Rating Breakdown
+            </h2>
+            <MultiCriteriaRating ratings={university.ratings} compact={false} />
           </Card>
         </div>
-
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Key Statistics */}
