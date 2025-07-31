@@ -1,0 +1,122 @@
+[
+  {
+    "Id": 1,
+    "name": "Cairo University",
+    "nameAr": "جامعة القاهرة",
+    "governorate": "Giza",
+    "location": "Giza",
+    "rating": 4.5,
+    "overallScore": 85.2,
+    "establishedYear": 1908,
+    "studentCount": 155000,
+    "type": "public"
+  },
+  {
+    "Id": 2,
+    "name": "Alexandria University",
+    "nameAr": "جامعة الإسكندرية",
+    "governorate": "Alexandria",
+    "location": "Alexandria",
+    "rating": 4.3,
+    "overallScore": 82.7,
+    "establishedYear": 1942,
+    "studentCount": 180000,
+    "type": "public"
+  },
+  {
+    "Id": 3,
+    "name": "American University in Cairo",
+    "nameAr": "الجامعة الأمريكية بالقاهرة",
+    "governorate": "Cairo",
+    "location": "New Cairo",
+    "rating": 4.7,
+    "overallScore": 88.9,
+    "establishedYear": 1919,
+    "studentCount": 6500,
+    "type": "private"
+  },
+  {
+    "Id": 4,
+    "name": "Ain Shams University",
+    "nameAr": "جامعة عين شمس",
+    "governorate": "Cairo",
+    "location": "Abbasia",
+    "rating": 4.2,
+    "overallScore": 80.1,
+    "establishedYear": 1950,
+    "studentCount": 180000,
+    "type": "public"
+  },
+  {
+    "Id": 5,
+    "name": "Assiut University",
+    "nameAr": "جامعة أسيوط",
+    "governorate": "Assiut",
+    "location": "Assiut",
+    "rating": 4.0,
+    "overallScore": 76.5,
+    "establishedYear": 1957,
+    "studentCount": 85000,
+    "type": "public"
+  },
+  {
+    "Id": 6,
+    "name": "Mansoura University",
+    "nameAr": "جامعة المنصورة",
+    "governorate": "Dakahlia",
+    "location": "Mansoura",
+    "rating": 4.1,
+    "overallScore": 78.3,
+    "establishedYear": 1972,
+    "studentCount": 120000,
+    "type": "public"
+  },
+  {
+    "Id": 7,
+    "name": "Zagazig University",
+    "nameAr": "جامعة الزقازيق",
+    "governorate": "Sharqia",
+    "location": "Zagazig",
+    "rating": 3.9,
+    "overallScore": 74.8,
+    "establishedYear": 1974,
+    "studentCount": 140000,
+    "type": "public"
+  },
+  {
+    "Id": 8,
+    "name": "Helwan University",
+    "nameAr": "جامعة حلوان",
+    "governorate": "Cairo",
+    "location": "Helwan",
+    "rating": 3.8,
+    "overallScore": 73.2,
+    "establishedYear": 1975,
+    "studentCount": 130000,
+    "type": "public"
+  },
+  {
+    "Id": 9,
+    "name": "Tanta University",
+    "nameAr": "جامعة طنطا",
+    "governorate": "Gharbia",
+    "location": "Tanta",
+    "rating": 3.9,
+    "overallScore": 75.1,
+    "establishedYear": 1972,
+    "studentCount": 110000,
+    "type": "public"
+  },
+  {
+    "Id": 10,
+    "name": "German University in Cairo",
+    "nameAr": "الجامعة الألمانية بالقاهرة",
+    "governorate": "Cairo",
+    "location": "New Cairo",
+    "rating": 4.6,
+    "overallScore": 87.4,
+    "establishedYear": 2003,
+    "studentCount": 8500,
+    "type": "private"
+  }
+]

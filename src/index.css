@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'react-toastify/dist/ReactToastify.css';
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200;
+  }
+  
+  .sidebar-link.active {
+    @apply text-white bg-secondary/20 border-r-2 border-secondary;
+  }
+  
+  .star-rating {
+    @apply flex items-center gap-1;
+  }
+  
+  .star-filled {
+    @apply text-secondary;
+  }
+  
+  .star-empty {
+    @apply text-gray-300;
+  }
+  
+  .university-card {
+    @apply bg-surface rounded-lg shadow-sm hover:shadow-md transform hover:scale-[1.02] transition-all duration-250 p-6 border border-gray-100;
+  }
+  
+  .ranking-row {
+    @apply hover:bg-gray-50 transition-colors duration-150;
+  }
+  
+  .admin-section {
+    @apply bg-surface rounded-lg shadow-sm p-6 border border-gray-100;
+  }
+}
+
+/* Toast customization */
+.Toastify__toast-container {
+  z-index: 9999;
+}
+
+.Toastify__toast {
+  font-family: 'Inter', sans-serif;
+  border-radius: 8px;
+  min-height: 60px;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.Toastify__toast--info {
+  background: linear-gradient(135deg, #1a5f7a, #3498db);
+}
+
+.Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.7);
+}

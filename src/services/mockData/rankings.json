@@ -1,0 +1,92 @@
+[
+  {
+    "Id": 1,
+    "universityId": 3,
+    "rank": 1,
+    "year": 2024,
+    "academicScore": 90.5,
+    "researchScore": 88.2,
+    "facilitiesScore": 87.9
+  },
+  {
+    "Id": 2,
+    "universityId": 10,
+    "rank": 2,
+    "year": 2024,
+    "academicScore": 89.1,
+    "researchScore": 85.8,
+    "facilitiesScore": 87.3
+  },
+  {
+    "Id": 3,
+    "universityId": 1,
+    "rank": 3,
+    "year": 2024,
+    "academicScore": 87.3,
+    "researchScore": 84.1,
+    "facilitiesScore": 84.2
+  },
+  {
+    "Id": 4,
+    "universityId": 2,
+    "rank": 4,
+    "year": 2024,
+    "academicScore": 85.7,
+    "researchScore": 81.2,
+    "facilitiesScore": 81.2
+  },
+  {
+    "Id": 5,
+    "universityId": 4,
+    "rank": 5,
+    "year": 2024,
+    "academicScore": 82.5,
+    "researchScore": 78.9,
+    "facilitiesScore": 78.9
+  },
+  {
+    "Id": 6,
+    "universityId": 6,
+    "rank": 6,
+    "year": 2024,
+    "academicScore": 80.1,
+    "researchScore": 77.2,
+    "facilitiesScore": 77.6
+  },
+  {
+    "Id": 7,
+    "universityId": 5,
+    "rank": 7,
+    "year": 2024,
+    "academicScore": 78.9,
+    "researchScore": 75.1,
+    "facilitiesScore": 75.5
+  },
+  {
+    "Id": 8,
+    "universityId": 9,
+    "rank": 8,
+    "year": 2024,
+    "academicScore": 77.2,
+    "researchScore": 73.8,
+    "facilitiesScore": 74.3
+  },
+  {
+    "Id": 9,
+    "universityId": 7,
+    "rank": 9,
+    "year": 2024,
+    "academicScore": 76.1,
+    "researchScore": 72.9,
+    "facilitiesScore": 75.4
+  },
+  {
+    "Id": 10,
+    "universityId": 8,
+    "rank": 10,
+    "year": 2024,
+    "academicScore": 74.8,
+    "researchScore": 71.2,
+    "facilitiesScore": 73.6
+  }
+]
