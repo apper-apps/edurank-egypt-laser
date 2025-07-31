@@ -16,10 +16,10 @@ const Universities = () => {
   const [filteredUniversities, setFilteredUniversities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+const [searchQuery, setSearchQuery] = useState("");
   const [selectedGovernorate, setSelectedGovernorate] = useState("");
   const [selectedType, setSelectedType] = useState("");
-
+  const [selectedProgram, setSelectedProgram] = useState("");
   const loadUniversities = async () => {
     try {
       setLoading(true);
@@ -39,7 +39,7 @@ const Universities = () => {
     loadUniversities();
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
     let filtered = [...universities];
 
     // Apply search filter
@@ -66,21 +66,30 @@ const Universities = () => {
       );
     }
 
-    setFilteredUniversities(filtered);
-  }, [universities, searchQuery, selectedGovernorate, selectedType]);
+    // Apply program filter
+    if (selectedProgram) {
+      filtered = filtered.filter(university =>
+        university.programs && university.programs.includes(selectedProgram)
+      );
+    }
 
-  const clearFilters = () => {
+    setFilteredUniversities(filtered);
+  }, [universities, searchQuery, selectedGovernorate, selectedType, selectedProgram]);
+
+const clearFilters = () => {
     setSearchQuery("");
     setSelectedGovernorate("");
     setSelectedType("");
-};
+    setSelectedProgram("");
+  };
 
   const handleUniversityClick = (universityId) => {
     navigate(`/university/${universityId}`);
   };
 
-  const governorates = [...new Set(universities.map(u => u.governorate))].sort();
+const governorates = [...new Set(universities.map(u => u.governorate))].sort();
   const types = [...new Set(universities.map(u => u.type))].sort();
+  const programs = [...new Set(universities.flatMap(u => u.programs || []))].sort();
 
   if (loading) {
     return <Loading type="grid" />;
@@ -148,7 +157,7 @@ const Universities = () => {
               </select>
             </div>
             
-            <div className="min-w-[120px]">
+<div className="min-w-[120px]">
               <select
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
@@ -163,7 +172,21 @@ const Universities = () => {
               </select>
             </div>
             
-            {(searchQuery || selectedGovernorate || selectedType) && (
+            <div className="min-w-[140px]">
+              <select
+                value={selectedProgram}
+                onChange={(e) => setSelectedProgram(e.target.value)}
+                className="w-full h-10 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              >
+                <option value="">All Programs</option>
+                {programs.map(program => (
+                  <option key={program} value={program}>
+                    {program}
+                  </option>
+                ))}
+              </select>
+            </div>
+{(searchQuery || selectedGovernorate || selectedType || selectedProgram) && (
               <Button variant="outline" onClick={clearFilters}>
                 <ApperIcon name="X" size={16} />
                 Clear
@@ -187,11 +210,12 @@ const Universities = () => {
               Showing {filteredUniversities.length} of {universities.length} universities
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <ApperIcon name="Filter" size={16} />
+<ApperIcon name="Filter" size={16} />
               <span>Filtered by: </span>
               {searchQuery && <span className="bg-primary/10 text-primary px-2 py-1 rounded">Search</span>}
               {selectedGovernorate && <span className="bg-primary/10 text-primary px-2 py-1 rounded">{selectedGovernorate}</span>}
               {selectedType && <span className="bg-primary/10 text-primary px-2 py-1 rounded capitalize">{selectedType}</span>}
+              {selectedProgram && <span className="bg-primary/10 text-primary px-2 py-1 rounded">{selectedProgram}</span>}
             </div>
           </div>
 

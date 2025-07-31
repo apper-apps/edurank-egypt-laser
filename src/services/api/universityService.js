@@ -9,9 +9,12 @@ class UniversityService {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  async getAll() {
+async getAll() {
     await this.delay();
-    return [...this.universities];
+    return this.universities.map(university => ({
+      ...university,
+      programs: this.getUniversityPrograms(university.Id)
+    }));
   }
 
   async getById(id) {
@@ -174,6 +177,21 @@ return { ...university };
       university.governorate.toLowerCase().includes(searchTerm)
     );
     return filtered;
+}
+
+  getAvailablePrograms() {
+    const allPrograms = new Set();
+    Object.values(this.getUniversityPrograms(1)).forEach(program => allPrograms.add(program));
+    Object.values(this.getUniversityPrograms(2)).forEach(program => allPrograms.add(program));
+    Object.values(this.getUniversityPrograms(3)).forEach(program => allPrograms.add(program));
+    Object.values(this.getUniversityPrograms(4)).forEach(program => allPrograms.add(program));
+    Object.values(this.getUniversityPrograms(5)).forEach(program => allPrograms.add(program));
+    Object.values(this.getUniversityPrograms(6)).forEach(program => allPrograms.add(program));
+    Object.values(this.getUniversityPrograms(7)).forEach(program => allPrograms.add(program));
+    Object.values(this.getUniversityPrograms(8)).forEach(program => allPrograms.add(program));
+    Object.values(this.getUniversityPrograms(9)).forEach(program => allPrograms.add(program));
+    Object.values(this.getUniversityPrograms(10)).forEach(program => allPrograms.add(program));
+    return Array.from(allPrograms).sort();
   }
 
   async filterByGovernorate(governorate) {
@@ -195,6 +213,18 @@ return { ...university };
     const filtered = this.universities.filter(university => 
       university.type.toLowerCase() === type.toLowerCase()
     );
+return filtered;
+  }
+
+  async filterByPrograms(programs) {
+    await this.delay();
+    if (!programs || programs.length === 0) {
+      return [...this.universities];
+    }
+    const filtered = this.universities.filter(university => {
+      const universityPrograms = this.getUniversityPrograms(university.Id);
+      return programs.some(program => universityPrograms.includes(program));
+    });
     return filtered;
   }
 }
