@@ -3,7 +3,18 @@ import ApperIcon from "@/components/ApperIcon";
 import StarRating from "@/components/molecules/StarRating";
 import MultiCriteriaRating from "@/components/molecules/MultiCriteriaRating";
 import { Card, CardContent } from "@/components/atoms/Card";
-const UniversityCard = ({ university, onClick }) => {
+const UniversityCard = ({ university, onClick, isSelected, onSelectionChange, showCheckbox = false }) => {
+  const handleCardClick = () => {
+    if (!showCheckbox) {
+      onClick(university.Id);
+    }
+  };
+
+  const handleCheckboxChange = (e) => {
+    e.stopPropagation();
+    onSelectionChange(university.Id, e.target.checked);
+  };
+
   return (
     <Card className="university-card cursor-pointer" onClick={() => onClick(university.Id)}>
       <CardContent className="p-0">
@@ -12,13 +23,23 @@ const UniversityCard = ({ university, onClick }) => {
         </div>
         
         <div className="p-6">
-          <div className="flex items-start justify-between mb-3">
+<div className="flex items-start justify-between mb-3">
             <div className="flex-1">
               <h3 className="font-display font-semibold text-lg text-gray-900 mb-1 leading-tight">
                 {university.name}
               </h3>
               <p className="text-sm text-gray-600 mb-2">{university.nameAr}</p>
             </div>
+            {showCheckbox && (
+              <div className="flex items-center ml-3">
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={handleCheckboxChange}
+                  className="w-5 h-5 text-primary bg-white border-2 border-gray-300 rounded focus:ring-primary focus:ring-2 cursor-pointer"
+                />
+              </div>
+            )}
           </div>
           
           <div className="flex items-center gap-2 mb-3">
