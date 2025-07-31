@@ -34,11 +34,9 @@
   .star-empty {
     @apply text-gray-300;
   }
-  
-  .university-card {
-    @apply bg-surface rounded-lg shadow-sm hover:shadow-md transform hover:scale-[1.02] transition-all duration-250 p-6 border border-gray-100;
+.university-card {
+    @apply bg-surface rounded-lg shadow-sm hover:shadow-md transform hover:scale-[1.02] transition-all duration-300 p-6 border border-gray-100;
   }
-  
   .ranking-row {
     @apply hover:bg-gray-50 transition-colors duration-150;
   }
