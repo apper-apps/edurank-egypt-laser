@@ -6,7 +6,7 @@ import Header from "@/components/organisms/Header";
 const Layout = () => {
   const location = useLocation();
   
-  const getPageTitle = () => {
+const getPageTitle = () => {
     switch (location.pathname) {
       case "/":
       case "/universities":
@@ -16,20 +16,26 @@ const Layout = () => {
       case "/admin":
         return "Admin";
       default:
+        if (location.pathname.startsWith("/university/")) {
+          return "University Details";
+        }
         return "EduRank Egypt";
     }
   };
   
-  const getBreadcrumbs = () => {
+const getBreadcrumbs = () => {
     switch (location.pathname) {
       case "/":
       case "/universities":
-        return ["Home", "Universities"];
+        return ["Home", "Universities"];  
       case "/rankings":
         return ["Home", "Rankings"];
       case "/admin":
         return ["Home", "Admin"];
       default:
+        if (location.pathname.startsWith("/university/")) {
+          return ["Home", "Universities", "University Details"];
+        }
         return ["Home"];
     }
   };

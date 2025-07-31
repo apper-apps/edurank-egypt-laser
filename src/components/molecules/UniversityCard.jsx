@@ -3,9 +3,9 @@ import { Card, CardContent } from "@/components/atoms/Card";
 import StarRating from "@/components/molecules/StarRating";
 import ApperIcon from "@/components/ApperIcon";
 
-const UniversityCard = ({ university }) => {
+const UniversityCard = ({ university, onClick }) => {
   return (
-    <Card className="university-card cursor-pointer">
+    <Card className="university-card cursor-pointer" onClick={() => onClick(university.Id)}>
       <CardContent className="p-0">
         <div className="h-32 bg-gradient-to-br from-primary to-primary/80 rounded-t-lg flex items-center justify-center">
           <ApperIcon name="GraduationCap" size={48} className="text-white/80" />

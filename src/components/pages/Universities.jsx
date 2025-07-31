@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import universityService from "@/services/api/universityService";
 import UniversityCard from "@/components/molecules/UniversityCard";
@@ -10,6 +11,7 @@ import Empty from "@/components/ui/Empty";
 import ApperIcon from "@/components/ApperIcon";
 
 const Universities = () => {
+  const navigate = useNavigate();
   const [universities, setUniversities] = useState([]);
   const [filteredUniversities, setFilteredUniversities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,6 +73,10 @@ const Universities = () => {
     setSearchQuery("");
     setSelectedGovernorate("");
     setSelectedType("");
+};
+
+  const handleUniversityClick = (universityId) => {
+    navigate(`/university/${universityId}`);
   };
 
   const governorates = [...new Set(universities.map(u => u.governorate))].sort();
@@ -189,9 +195,13 @@ const Universities = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredUniversities.map((university) => (
-              <UniversityCard key={university.Id} university={university} />
+              <UniversityCard 
+                key={university.Id} 
+                university={university} 
+                onClick={handleUniversityClick}
+              />
             ))}
           </div>
         </>
