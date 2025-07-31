@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import universityService from "@/services/api/universityService";
 import rankingService from "@/services/api/rankingService";
+import reviewService from "@/services/api/reviewService";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/atoms/Card";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import ApperIcon from "@/components/ApperIcon";
+import StarRating from "@/components/molecules/StarRating";
 
 const Admin = () => {
   const [universities, setUniversities] = useState([]);
@@ -46,10 +48,11 @@ const Admin = () => {
     return <Error message={error} onRetry={loadData} />;
   }
 
-  const tabs = [
+const tabs = [
     { id: "overview", label: "Overview", icon: "BarChart3" },
     { id: "universities", label: "Universities", icon: "GraduationCap" },
     { id: "rankings", label: "Rankings", icon: "Trophy" },
+    { id: "reviews", label: "Pending Reviews", icon: "MessageSquare" },
     { id: "settings", label: "Settings", icon: "Settings" }
   ];
 
@@ -87,10 +90,11 @@ const Admin = () => {
           </nav>
         </div>
 
-        <div className="p-6">
+<div className="p-6">
           {activeTab === "overview" && <OverviewTab universities={universities} rankings={rankings} />}
           {activeTab === "universities" && <UniversitiesTab universities={universities} onUpdate={loadData} />}
           {activeTab === "rankings" && <RankingsTab rankings={rankings} onUpdate={loadData} />}
+          {activeTab === "reviews" && <ReviewsTab />}
           {activeTab === "settings" && <SettingsTab />}
         </div>
       </div>
@@ -677,6 +681,160 @@ const SettingsTab = () => {
           Save Settings
         </Button>
       </div>
+</div>
+  );
+};
+
+const ReviewsTab = () => {
+  const [pendingReviews, setPendingReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [processing, setProcessing] = useState(false);
+
+  const loadPendingReviews = async () => {
+    try {
+      setLoading(true);
+      const reviews = await reviewService.getPendingReviews();
+      setPendingReviews(reviews);
+    } catch (err) {
+      toast.error("Failed to load pending reviews");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadPendingReviews();
+  }, []);
+
+  const handleApprove = async (reviewId) => {
+    try {
+      setProcessing(true);
+      await reviewService.approveReview(reviewId);
+      toast.success("Review approved successfully");
+      loadPendingReviews();
+    } catch (err) {
+      toast.error("Failed to approve review");
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleReject = async (reviewId) => {
+    try {
+      setProcessing(true);
+      await reviewService.rejectReview(reviewId);
+      toast.success("Review rejected successfully");
+      loadPendingReviews();
+    } catch (err) {
+      toast.error("Failed to reject review");
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  if (loading) {
+    return <Loading type="grid" />;
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h3 className="font-display text-lg font-semibold">Pending Reviews ({pendingReviews.length})</h3>
+        <Button onClick={loadPendingReviews} variant="outline" className="flex items-center gap-2">
+          <ApperIcon name="RefreshCw" size={16} />
+          Refresh
+        </Button>
+      </div>
+
+      {pendingReviews.length === 0 ? (
+        <Card>
+          <CardContent className="p-12 text-center">
+            <ApperIcon name="MessageSquare" size={48} className="text-gray-300 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Pending Reviews</h3>
+            <p className="text-gray-500">All reviews have been processed!</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-4">
+          {pendingReviews.map((review) => (
+            <Card key={review.Id}>
+              <CardContent className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                      <ApperIcon name="User" size={20} className="text-primary" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-gray-900">{review.reviewerName}</span>
+                        <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
+                          Pending
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {review.program} • {new Date(review.date).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <StarRating rating={review.overallRating} size={14} />
+                    <span className="text-sm font-semibold text-gray-700">
+                      {review.overallRating}/5
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="mb-4">
+                  <p className="text-gray-700 leading-relaxed">{review.reviewText}</p>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4 p-3 bg-gray-50 rounded-lg">
+                  <div className="text-center">
+                    <div className="text-xs text-gray-500 mb-1">Academic</div>
+                    <div className="font-semibold text-gray-900">{review.ratings.academicQuality}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-gray-500 mb-1">Facilities</div>
+                    <div className="font-semibold text-gray-900">{review.ratings.campusFacilities}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-gray-500 mb-1">Student Life</div>
+                    <div className="font-semibold text-gray-900">{review.ratings.studentLife}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-gray-500 mb-1">Career Services</div>
+                    <div className="font-semibold text-gray-900">{review.ratings.careerServices}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-gray-500 mb-1">Research</div>
+                    <div className="font-semibold text-gray-900">{review.ratings.researchOpportunities}</div>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => handleApprove(review.Id)}
+                    disabled={processing}
+                    className="flex-1 bg-success hover:bg-success/90"
+                  >
+                    <ApperIcon name="Check" size={16} />
+                    Approve
+                  </Button>
+                  <Button
+                    onClick={() => handleReject(review.Id)}
+                    disabled={processing}
+                    variant="outline"
+                    className="flex-1 text-error border-error hover:bg-error hover:text-white"
+                  >
+                    <ApperIcon name="X" size={16} />
+                    Reject
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

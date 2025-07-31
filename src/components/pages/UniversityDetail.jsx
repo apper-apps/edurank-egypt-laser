@@ -256,8 +256,8 @@ const [university, setUniversity] = useState(null);
                 <Loading />
               </div>
             ) : reviews.length > 0 ? (
-              <div className="space-y-6">
-                {reviews.slice(0, 3).map((review) => (
+<div className="space-y-6">
+                {reviews.map((review) => (
                   <div key={review.Id} className="border-b border-gray-100 last:border-b-0 pb-6 last:pb-0">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">

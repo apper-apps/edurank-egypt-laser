@@ -67,6 +67,57 @@ const mockReviews = [
     overallRating: 4.7,
     date: "2024-01-05T16:45:00Z",
     isVerified: true
+  },
+  {
+    Id: 5,
+    universityId: 1,
+    reviewerName: "Mohamed Salah",
+    program: "Medicine",
+    reviewText: "The medical school has excellent laboratories and clinical training opportunities. Professors are very knowledgeable and supportive.",
+    ratings: {
+      academicQuality: 4.3,
+      campusFacilities: 4.1,
+      studentLife: 3.8,
+      careerServices: 4.2,
+      researchOpportunities: 4.4
+    },
+    overallRating: 4.2,
+    date: "2024-01-20T11:15:00Z",
+    isVerified: false
+  },
+  {
+    Id: 6,
+    universityId: 2,
+    reviewerName: "Nour Ahmed",
+    program: "Psychology",
+    reviewText: "Great psychology program with practical training. The campus environment is very welcoming and supportive for students.",
+    ratings: {
+      academicQuality: 4.2,
+      campusFacilities: 4.0,
+      studentLife: 4.5,
+      careerServices: 3.7,
+      researchOpportunities: 3.9
+    },
+    overallRating: 4.1,
+    date: "2024-01-18T14:30:00Z",
+    isVerified: false
+  },
+  {
+    Id: 7,
+    universityId: 3,
+    reviewerName: "John Smith",
+    program: "Business Administration",
+    reviewText: "Outstanding business program with international perspective. The networking opportunities and career services are exceptional.",
+    ratings: {
+      academicQuality: 4.6,
+      campusFacilities: 4.7,
+      studentLife: 4.3,
+      careerServices: 4.8,
+      researchOpportunities: 4.2
+    },
+    overallRating: 4.5,
+    date: "2024-01-22T09:45:00Z",
+    isVerified: false
   }
 ];
 
@@ -95,17 +146,44 @@ class ReviewService {
   }
 
   async getByUniversityId(universityId) {
-    await this.delay();
-    const universityReviews = this.reviews.filter(r => r.universityId === parseInt(universityId));
+await this.delay();
+    const universityReviews = this.reviews.filter(r => r.universityId === parseInt(universityId) && r.isVerified);
     return universityReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
   }
 
+  async getPendingReviews() {
+    await this.delay();
+    const pendingReviews = this.reviews.filter(r => !r.isVerified);
+    return pendingReviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+
+  async approveReview(id) {
+    await this.delay();
+    const review = this.reviews.find(r => r.Id === parseInt(id));
+    if (!review) {
+      throw new Error(`Review with ID ${id} not found`);
+    }
+    review.isVerified = true;
+    return { ...review };
+  }
+
+  async rejectReview(id) {
+    await this.delay();
+    const index = this.reviews.findIndex(r => r.Id === parseInt(id));
+    if (index === -1) {
+      throw new Error(`Review with ID ${id} not found`);
+    }
+    const deletedReview = this.reviews.splice(index, 1)[0];
+    return { ...deletedReview };
+  }
+
   async create(reviewData) {
-    await this.delay(500); // Longer delay for create operation
+await this.delay(500); // Longer delay for create operation
     const newReview = {
       Id: this.nextId++,
       ...reviewData,
-      date: reviewData.date || new Date().toISOString()
+      date: reviewData.date || new Date().toISOString(),
+      isVerified: false  // New reviews start as pending
     };
     this.reviews.push(newReview);
     return { ...newReview };
@@ -125,7 +203,7 @@ class ReviewService {
     return { ...this.reviews[index] };
   }
 
-  async delete(id) {
+async delete(id) {
     await this.delay();
     const index = this.reviews.findIndex(r => r.Id === parseInt(id));
     if (index === -1) {
@@ -135,10 +213,9 @@ class ReviewService {
     return { ...deletedReview };
   }
 
-  async getUniversityStats(universityId) {
+async getUniversityStats(universityId) {
     await this.delay();
-    const universityReviews = this.reviews.filter(r => r.universityId === parseInt(universityId));
-    
+    const universityReviews = this.reviews.filter(r => r.universityId === parseInt(universityId) && r.isVerified);
     if (universityReviews.length === 0) {
       return {
         totalReviews: 0,

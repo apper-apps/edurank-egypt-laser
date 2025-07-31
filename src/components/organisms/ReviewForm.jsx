@@ -82,8 +82,8 @@ const ReviewForm = ({ isOpen, onClose, universityId, onReviewSubmitted }) => {
           formData.careerServices + 
           formData.researchOpportunities
         ) / 5,
-        date: new Date().toISOString(),
-        isVerified: Math.random() > 0.3 // 70% chance of being verified
+date: new Date().toISOString(),
+        isVerified: false // Reviews start as pending approval
       };
 
       await reviewService.create(reviewData);
