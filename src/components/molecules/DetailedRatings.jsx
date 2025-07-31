@@ -36,7 +36,7 @@ const DetailedRatings = ({ ratings, className = "" }) => {
     }
   ];
 
-  const averageRating = criteria.reduce((sum, criterion) => sum + ratings[criterion.key], 0) / criteria.length;
+const averageRating = criteria.reduce((sum, criterion) => sum + (ratings?.[criterion.key] ?? 0), 0) / criteria.length;
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -60,7 +60,7 @@ const DetailedRatings = ({ ratings, className = "" }) => {
               <div className="text-right">
                 <StarRating rating={ratings[criterion.key]} size={16} />
                 <div className="text-sm text-white/80 mt-1">
-                  {ratings[criterion.key].toFixed(1)}/5.0
+{(ratings?.[criterion.key] ?? 0).toFixed(1)}/5.0
                 </div>
               </div>
             </div>
