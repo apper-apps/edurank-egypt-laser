@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import universityService from "@/services/api/universityService";
+import reviewService from "@/services/api/reviewService";
 import ApperIcon from "@/components/ApperIcon";
 import StarRating from "@/components/molecules/StarRating";
 import DetailedRatings from "@/components/molecules/DetailedRatings";
@@ -11,13 +12,17 @@ import Error from "@/components/ui/Error";
 import Universities from "@/components/pages/Universities";
 import Button from "@/components/atoms/Button";
 import { Card } from "@/components/atoms/Card";
-
+import ReviewForm from "@/components/organisms/ReviewForm";
 const UniversityDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [university, setUniversity] = useState(null);
+const [university, setUniversity] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [reviews, setReviews] = useState([]);
+  const [reviewStats, setReviewStats] = useState(null);
+  const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
 
   const loadUniversity = async () => {
     try {
@@ -33,8 +38,25 @@ const UniversityDetail = () => {
     }
   };
 
+  const loadReviews = async () => {
+    try {
+      setReviewsLoading(true);
+      const [reviewsData, statsData] = await Promise.all([
+        reviewService.getByUniversityId(id),
+        reviewService.getUniversityStats(id)
+      ]);
+      setReviews(reviewsData);
+      setReviewStats(statsData);
+    } catch (err) {
+      console.error("Failed to load reviews:", err);
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadUniversity();
+    loadReviews();
   }, [id]);
 
   const handleBack = () => {
@@ -100,13 +122,20 @@ const UniversityDetail = () => {
 <div className="bg-white/10 rounded-lg p-6 min-w-[320px]">
             <div className="text-center mb-6">
               <div className="text-3xl font-bold text-secondary mb-2">
-                {university.overallScore}
+                {reviewStats?.averageRating || university.overallScore}
               </div>
-              <div className="text-white/80 mb-3">Overall Score</div>
+              <div className="text-white/80 mb-3">
+                {reviewStats?.totalReviews > 0 ? `Based on ${reviewStats.totalReviews} reviews` : 'Overall Score'}
+              </div>
+              {reviewStats?.totalReviews > 0 && (
+                <div className="flex justify-center">
+                  <StarRating rating={reviewStats.averageRating} size={16} />
+                </div>
+              )}
             </div>
-            <DetailedRatings ratings={university.ratings} />
+            <DetailedRatings ratings={reviewStats?.criteriaAverages || university.ratings} />
             
-            <div className="space-y-3">
+            <div className="space-y-3 mb-6">
               <div className="flex justify-between items-center">
                 <span className="text-white/70">Students</span>
                 <span className="text-white font-semibold">
@@ -126,6 +155,14 @@ const UniversityDetail = () => {
                 </span>
               </div>
             </div>
+            
+            <Button
+              onClick={() => setIsReviewFormOpen(true)}
+              className="w-full bg-secondary hover:bg-secondary/90 text-white"
+            >
+              <ApperIcon name="PenTool" size={16} />
+              Write Review
+            </Button>
           </div>
         </div>
       </div>
@@ -197,13 +234,89 @@ const UniversityDetail = () => {
             </div>
 </Card>
 
+          {/* Student Reviews */}
+          <Card className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+                <ApperIcon name="MessageSquare" size={24} />
+                Student Reviews ({reviewStats?.totalReviews || 0})
+              </h2>
+              <Button
+                onClick={() => setIsReviewFormOpen(true)}
+                variant="outline"
+                size="sm"
+              >
+                <ApperIcon name="PenTool" size={16} />
+                Write Review
+              </Button>
+            </div>
+            
+            {reviewsLoading ? (
+              <div className="flex justify-center py-8">
+                <Loading />
+              </div>
+            ) : reviews.length > 0 ? (
+              <div className="space-y-6">
+                {reviews.slice(0, 3).map((review) => (
+                  <div key={review.Id} className="border-b border-gray-100 last:border-b-0 pb-6 last:pb-0">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                          <ApperIcon name="User" size={16} className="text-primary" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-gray-900">{review.reviewerName}</span>
+                            {review.isVerified && (
+                              <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                                Verified
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {review.program} • {new Date(review.date).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <StarRating rating={review.overallRating} size={14} />
+                        <span className="text-sm font-semibold text-gray-700">
+                          {review.overallRating}/5
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-gray-700 leading-relaxed">{review.reviewText}</p>
+                  </div>
+                ))}
+                
+                {reviews.length > 3 && (
+                  <div className="text-center pt-4">
+                    <Button variant="outline">
+                      View All {reviews.length} Reviews
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <ApperIcon name="MessageSquare" size={48} className="text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No Reviews Yet</h3>
+                <p className="text-gray-500 mb-4">Be the first to share your experience at this university!</p>
+                <Button onClick={() => setIsReviewFormOpen(true)}>
+                  <ApperIcon name="PenTool" size={16} />
+                  Write First Review
+                </Button>
+              </div>
+            )}
+          </Card>
+
           {/* Detailed Ratings Breakdown */}
           <Card className="p-6">
             <h2 className="text-xl font-bold text-primary mb-6 flex items-center gap-2">
               <ApperIcon name="BarChart3" size={24} />
               Rating Breakdown
             </h2>
-            <MultiCriteriaRating ratings={university.ratings} compact={false} />
+            <MultiCriteriaRating ratings={reviewStats?.criteriaAverages || university.ratings} compact={false} />
           </Card>
         </div>
         {/* Sidebar */}
@@ -303,9 +416,20 @@ const UniversityDetail = () => {
                 </div>
               </div>
             </div>
-          </Card>
+</Card>
         </div>
       </div>
+      
+      {/* Review Form Modal */}
+      <ReviewForm
+        isOpen={isReviewFormOpen}
+        onClose={() => setIsReviewFormOpen(false)}
+        universityId={id}
+        onReviewSubmitted={() => {
+          loadReviews();
+          toast.success("Thank you for your review!");
+        }}
+      />
     </div>
   );
 };
